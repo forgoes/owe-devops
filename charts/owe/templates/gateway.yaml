@@ -1,0 +1,17 @@
+{{- if .Values.gateway.enabled }}
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: {{ .Values.gateway.name }}
+  namespace: {{ .Values.namespace }}
+spec:
+  gatewayClassName: {{ .Values.gateway.gatewayClassName }}
+  listeners:
+    - name: {{ .Values.gateway.listener.name }}
+      hostname: {{ .Values.gateway.listener.hostname | quote }}
+      port: {{ .Values.gateway.listener.port }}
+      protocol: {{ .Values.gateway.listener.protocol }}
+      allowedRoutes:
+        namespaces:
+          from: Same
+{{- end }}

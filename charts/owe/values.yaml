@@ -3,9 +3,21 @@ namespaceConfig:
   create: true
 imagePullSecrets:
   - name: ghcr-creds
+gateway:
+  enabled: true
+  name: owe-gateway
+  gatewayClassName: envoy-gateway
+  gatewayClass:
+    create: true
+    controllerName: gateway.envoyproxy.io/gatewayclass-controller
+  listener:
+    name: http
+    port: 80
+    protocol: HTTP
+    hostname: owe.hongkang.name
 
 ui:
-  replicaCount: 1
+  replicaCount: 3
   image:
     repository: ghcr.io/forgoes/owe-ui
     tag: v0.0.1.dev8
@@ -14,15 +26,14 @@ ui:
     port: 3000
   env:
     NEXT_PUBLIC_API_BASE_URL: https://owe.hongkang.name
-  ingress:
+  route:
     enabled: true
-    className: nginx
-    host: owe.example.com
-    path: /
+    host: owe.hongkang.name
+    pathPrefix: /
   resources: {}
 
 service:
-  replicaCount: 1
+  replicaCount: 3
   image:
     repository: ghcr.io/forgoes/owe-service
     tag: v0.0.1.dev8
@@ -58,9 +69,10 @@ service:
       secretName: owe-service-secrets
       key: LANGSMITH_API_KEY
       optional: true
-  ingress:
+  route:
     enabled: true
-    className: nginx
-    host: owe-service.example.com
-    path: /
+    host: owe.hongkang.name
+    pathPrefixes:
+      - /api
+      - /healthz
   resources: {}

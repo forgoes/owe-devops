@@ -52,7 +52,11 @@ spec:
                           raise
                       time.sleep(5)
               PY
-              python -m alembic upgrade head
+              python - <<'PY'
+              from alembic.config import main
+
+              raise SystemExit(main(argv=["-c", "alembic.ini", "upgrade", "head"]))
+              PY
           envFrom:
             - configMapRef:
                 name: {{ include "owe.serviceName" . }}

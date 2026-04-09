@@ -102,6 +102,37 @@ helm upgrade --install postgres /Users/jayden/workspace/github/owe/owe-devops/ch
   --set namespaceConfig.create=false
 ```
 
+## Envoy Gateway
+
+Install Envoy Gateway with Helm using the tracked values file in this repository:
+
+```bash
+helm install eg oci://docker.io/envoyproxy/gateway-helm \
+  --version v1.7.0 \
+  -n envoy-gateway-system \
+  --create-namespace \
+  --skip-crds \
+  -f /Users/jayden/workspace/github/owe/owe-devops/envoy-gateway/values.yaml
+```
+
+If Gateway API CRDs are not installed yet, apply them first:
+
+```bash
+helm template eg oci://docker.io/envoyproxy/gateway-helm \
+  --version v1.7.0 \
+  --set crds.gatewayAPI.enabled=true \
+  --set crds.gatewayAPI.channel=standard \
+  --set crds.envoyGateway.enabled=true \
+  | kubectl apply --server-side -f -
+```
+
+Then wait for Envoy Gateway to be ready and check its external address:
+
+```bash
+kubectl wait --timeout=5m -n envoy-gateway-system deployment/envoy-gateway --for=condition=Available
+kubectl get svc -n envoy-gateway-system
+```
+
 ## Notes
 
 - The values file currently uses placeholder hostnames and GHCR repositories and should be customized for your environment.
