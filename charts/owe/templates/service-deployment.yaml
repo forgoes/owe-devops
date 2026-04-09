@@ -13,6 +13,10 @@ spec:
       labels:
         app.kubernetes.io/name: {{ include "owe.serviceName" . }}
     spec:
+{{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+{{ toYaml . | indent 8 }}
+{{- end }}
       containers:
         - name: service
           image: "{{ .Values.service.image.repository }}:{{ .Values.service.image.tag }}"

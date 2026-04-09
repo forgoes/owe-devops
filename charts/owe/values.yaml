@@ -1,6 +1,8 @@
 namespace: owe
 namespaceConfig:
   create: true
+imagePullSecrets:
+  - name: ghcr-creds
 
 ui:
   replicaCount: 1

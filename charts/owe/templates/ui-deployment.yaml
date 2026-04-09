@@ -13,6 +13,10 @@ spec:
       labels:
         app.kubernetes.io/name: {{ include "owe.uiName" . }}
     spec:
+{{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+{{ toYaml . | indent 8 }}
+{{- end }}
       containers:
         - name: ui
           image: "{{ .Values.ui.image.repository }}:{{ .Values.ui.image.tag }}"

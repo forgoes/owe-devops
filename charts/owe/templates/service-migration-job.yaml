@@ -11,6 +11,10 @@ spec:
   backoffLimit: 6
   template:
     spec:
+{{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+{{ toYaml . | indent 8 }}
+{{- end }}
       restartPolicy: Never
       containers:
         - name: migration
@@ -48,7 +52,7 @@ spec:
                           raise
                       time.sleep(5)
               PY
-              alembic upgrade head
+              python -m alembic upgrade head
           envFrom:
             - configMapRef:
                 name: {{ include "owe.serviceName" . }}
