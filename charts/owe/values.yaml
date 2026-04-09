@@ -73,6 +73,6 @@ service:
     enabled: true
     host: owe.hongkang.name
     pathPrefixes:
-      - /api
+      - /api/v1
       - /healthz
   resources: {}
