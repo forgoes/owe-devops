@@ -1,17 +1,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "owe-staging.uiName" . }}
+  name: {{ include "owe.uiName" . }}
   namespace: {{ .Values.namespace }}
 spec:
   replicas: {{ .Values.ui.replicaCount }}
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ include "owe-staging.uiName" . }}
+      app.kubernetes.io/name: {{ include "owe.uiName" . }}
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: {{ include "owe-staging.uiName" . }}
+        app.kubernetes.io/name: {{ include "owe.uiName" . }}
     spec:
       containers:
         - name: ui
@@ -22,7 +22,7 @@ spec:
               name: http
           envFrom:
             - configMapRef:
-                name: {{ include "owe-staging.uiName" . }}
+                name: {{ include "owe.uiName" . }}
           readinessProbe:
             httpGet:
               path: /
@@ -37,4 +37,3 @@ spec:
             periodSeconds: 20
           resources:
 {{ toYaml .Values.ui.resources | indent 12 }}
-

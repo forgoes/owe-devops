@@ -2,7 +2,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ include "owe-staging.serviceName" . }}-migration
+  name: {{ include "owe.serviceName" . }}-migration
   namespace: {{ .Values.namespace }}
   annotations:
     "helm.sh/hook": post-install,post-upgrade
@@ -51,7 +51,7 @@ spec:
               alembic upgrade head
           envFrom:
             - configMapRef:
-                name: {{ include "owe-staging.serviceName" . }}
+                name: {{ include "owe.serviceName" . }}
           env:
 {{- range $key, $value := .Values.service.secretEnv }}
             - name: {{ $key }}

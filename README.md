@@ -8,20 +8,20 @@ The current release flow is intentionally simple:
 
 1. Push a semantic version tag such as `v0.1.0` to [`owe-service`](/Users/jayden/workspace/github/owe/owe-service) or [`owe-ui`](/Users/jayden/workspace/github/owe/owe-ui)
 2. GitHub Actions builds and pushes a versioned image to GHCR
-3. The workflow updates [`charts/owe-staging/values.yaml`](/Users/jayden/workspace/github/owe/owe-devops/charts/owe-staging/values.yaml)
+3. The workflow updates [`charts/owe/values.yaml`](/Users/jayden/workspace/github/owe/owe-devops/charts/owe/values.yaml)
 4. Argo CD syncs the new image tag into the staging Kubernetes cluster
 
 ## Layout
 
-- [`charts/owe-staging`](/Users/jayden/workspace/github/owe/owe-devops/charts/owe-staging): Helm chart for the UI and service
+- [`charts/owe`](/Users/jayden/workspace/github/owe/owe-devops/charts/owe): Helm chart for the UI and service
 - [`charts/postgres`](/Users/jayden/workspace/github/owe/owe-devops/charts/postgres): Helm chart for the dedicated PostgreSQL deployment
 - [`argocd/root-application.yaml`](/Users/jayden/workspace/github/owe/owe-devops/argocd/root-application.yaml): parent Argo CD application for app-of-apps management
-- [`argocd/apps/owe-staging-application.yaml`](/Users/jayden/workspace/github/owe/owe-devops/argocd/apps/owe-staging-application.yaml): child Argo CD application for the OWE stack
+- [`argocd/apps/owe-application.yaml`](/Users/jayden/workspace/github/owe/owe-devops/argocd/apps/owe-application.yaml): child Argo CD application for the OWE stack
 - [`argocd/apps/postgres-application.yaml`](/Users/jayden/workspace/github/owe/owe-devops/argocd/apps/postgres-application.yaml): child Argo CD application for PostgreSQL
 
 ## Required Secrets
 
-Create a Kubernetes secret named `owe-service-secrets` in the `owe-staging` namespace with:
+Create a Kubernetes secret named `owe-service-secrets` in the `owe` namespace with:
 
 - `OPENAI_API_KEY`
 - `DB_USER`

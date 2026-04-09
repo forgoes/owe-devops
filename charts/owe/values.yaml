@@ -1,4 +1,4 @@
-namespace: owe-staging
+namespace: owe
 namespaceConfig:
   create: true
 
@@ -11,11 +11,11 @@ ui:
   service:
     port: 3000
   env:
-    NEXT_PUBLIC_API_BASE_URL: https://owe-service-staging.example.com
+    NEXT_PUBLIC_API_BASE_URL: https://owe-service.example.com
   ingress:
     enabled: true
     className: nginx
-    host: owe-staging.example.com
+    host: owe.example.com
     path: /
   resources: {}
 
@@ -59,6 +59,6 @@ service:
   ingress:
     enabled: true
     className: nginx
-    host: owe-service-staging.example.com
+    host: owe-service.example.com
     path: /
   resources: {}

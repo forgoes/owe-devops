@@ -2,7 +2,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ include "owe-staging.uiName" . }}
+  name: {{ include "owe.uiName" . }}
   namespace: {{ .Values.namespace }}
 spec:
   ingressClassName: {{ .Values.ui.ingress.className }}
@@ -14,8 +14,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: {{ include "owe-staging.uiName" . }}
+                name: {{ include "owe.uiName" . }}
                 port:
                   number: {{ .Values.ui.service.port }}
 {{- end }}
-

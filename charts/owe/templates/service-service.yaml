@@ -1,13 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "owe-staging.serviceName" . }}
+  name: {{ include "owe.serviceName" . }}
   namespace: {{ .Values.namespace }}
 spec:
   selector:
-    app.kubernetes.io/name: {{ include "owe-staging.serviceName" . }}
+    app.kubernetes.io/name: {{ include "owe.serviceName" . }}
   ports:
     - name: http
       port: {{ .Values.service.service.port }}
       targetPort: http
-

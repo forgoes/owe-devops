@@ -1,8 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "owe-staging.uiName" . }}
+  name: {{ include "owe.uiName" . }}
   namespace: {{ .Values.namespace }}
 data:
   NEXT_PUBLIC_API_BASE_URL: {{ .Values.ui.env.NEXT_PUBLIC_API_BASE_URL | quote }}
-

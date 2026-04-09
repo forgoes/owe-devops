@@ -1,17 +1,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "owe-staging.serviceName" . }}
+  name: {{ include "owe.serviceName" . }}
   namespace: {{ .Values.namespace }}
 spec:
   replicas: {{ .Values.service.replicaCount }}
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ include "owe-staging.serviceName" . }}
+      app.kubernetes.io/name: {{ include "owe.serviceName" . }}
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: {{ include "owe-staging.serviceName" . }}
+        app.kubernetes.io/name: {{ include "owe.serviceName" . }}
     spec:
       containers:
         - name: service
@@ -22,7 +22,7 @@ spec:
               name: http
           envFrom:
             - configMapRef:
-                name: {{ include "owe-staging.serviceName" . }}
+                name: {{ include "owe.serviceName" . }}
           env:
 {{- range $key, $value := .Values.service.secretEnv }}
             - name: {{ $key }}
@@ -48,4 +48,3 @@ spec:
             periodSeconds: 20
           resources:
 {{ toYaml .Values.service.resources | indent 12 }}
-
