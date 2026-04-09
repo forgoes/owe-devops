@@ -6,7 +6,7 @@ ui:
   replicaCount: 1
   image:
     repository: ghcr.io/forgoes/owe-ui
-    tag: v0.0.1.dev4
+    tag: v0.0.1.dev7
     pullPolicy: IfNotPresent
   service:
     port: 3000
