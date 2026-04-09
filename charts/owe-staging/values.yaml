@@ -5,8 +5,8 @@ namespaceConfig:
 ui:
   replicaCount: 1
   image:
-    repository: ghcr.io/example/owe-ui
-    tag: v0.1.0
+    repository: ghcr.io/forgoes/owe-ui
+    tag: v0.0.1.dev4
     pullPolicy: IfNotPresent
   service:
     port: 3000
@@ -22,8 +22,8 @@ ui:
 service:
   replicaCount: 1
   image:
-    repository: ghcr.io/example/owe-service
-    tag: v0.1.0
+    repository: ghcr.io/forgoes/owe-service
+    tag: v0.0.1.dev4
     pullPolicy: IfNotPresent
   migration:
     enabled: true
