@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "owe-staging.serviceName" . }}
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.service.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "owe-staging.serviceName" . }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "owe-staging.serviceName" . }}
+    spec:
+      containers:
+        - name: service
+          image: "{{ .Values.service.image.repository }}:{{ .Values.service.image.tag }}"
+          imagePullPolicy: {{ .Values.service.image.pullPolicy }}
+          ports:
+            - containerPort: 8000
+              name: http
+          envFrom:
+            - configMapRef:
+                name: {{ include "owe-staging.serviceName" . }}
+          env:
+{{- range $key, $value := .Values.service.secretEnv }}
+            - name: {{ $key }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $value.secretName }}
+                  key: {{ $value.key }}
+{{- if hasKey $value "optional" }}
+                  optional: {{ $value.optional }}
+{{- end }}
+{{- end }}
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 20
+          resources:
+{{ toYaml .Values.service.resources | indent 12 }}
+

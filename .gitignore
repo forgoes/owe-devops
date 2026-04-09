@@ -35,3 +35,12 @@ override.tf.json
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
+
+# Local secret manifests copied from example templates
+secrets/postgres-secrets.yaml
+secrets/owe-service-secrets.yaml
+
+# Local Helm override files with secrets
+charts/postgres/values.local.yaml
+
+.idea/

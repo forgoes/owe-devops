@@ -1,0 +1,64 @@
+namespace: owe-staging
+namespaceConfig:
+  create: true
+
+ui:
+  replicaCount: 1
+  image:
+    repository: ghcr.io/example/owe-ui
+    tag: v0.1.0
+    pullPolicy: IfNotPresent
+  service:
+    port: 3000
+  env:
+    NEXT_PUBLIC_API_BASE_URL: https://owe-service-staging.example.com
+  ingress:
+    enabled: true
+    className: nginx
+    host: owe-staging.example.com
+    path: /
+  resources: {}
+
+service:
+  replicaCount: 1
+  image:
+    repository: ghcr.io/example/owe-service
+    tag: v0.1.0
+    pullPolicy: IfNotPresent
+  migration:
+    enabled: true
+  service:
+    port: 8000
+  env:
+    APP_ENV: staging
+    LOG_LEVEL: INFO
+    OPENAI_MODEL: gpt-5.4
+    MODEL_STARTUP_PROBE: "true"
+    DB_HOST: postgres-rw.postgres.svc.cluster.local
+    DB_PORT: "5432"
+    DB_NAME: app
+    DB_SCHEMA: owe
+    DB_ECHO: "false"
+    LANGSMITH_TRACING: "false"
+    LANGSMITH_PROJECT: owe-service
+    LANGSMITH_ENDPOINT: https://api.smith.langchain.com
+  secretEnv:
+    OPENAI_API_KEY:
+      secretName: owe-service-secrets
+      key: OPENAI_API_KEY
+    DB_USER:
+      secretName: owe-service-secrets
+      key: DB_USER
+    DB_PASSWORD:
+      secretName: owe-service-secrets
+      key: DB_PASSWORD
+    LANGSMITH_API_KEY:
+      secretName: owe-service-secrets
+      key: LANGSMITH_API_KEY
+      optional: true
+  ingress:
+    enabled: true
+    className: nginx
+    host: owe-service-staging.example.com
+    path: /
+  resources: {}

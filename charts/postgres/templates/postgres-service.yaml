@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "postgres.headlessServiceName" . }}
+  namespace: {{ .Values.namespace }}
+spec:
+  clusterIP: None
+  selector:
+    app.kubernetes.io/name: {{ include "postgres.fullname" . }}
+  ports:
+    - name: postgres
+      port: {{ .Values.postgres.service.port }}
+      targetPort: postgres
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "postgres.readWriteServiceName" . }}
+  namespace: {{ .Values.namespace }}
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: {{ include "postgres.fullname" . }}
+  ports:
+    - name: postgres
+      port: {{ .Values.postgres.service.port }}
+      targetPort: postgres

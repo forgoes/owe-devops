@@ -1,0 +1,31 @@
+namespace: postgres
+namespaceConfig:
+  create: true
+
+postgres:
+  nameOverride: postgres
+  image:
+    repository: pgvector/pgvector
+    tag: pg18-trixie
+    pullPolicy: IfNotPresent
+  service:
+    port: 5432
+  auth:
+    database: app
+    createSecret: false
+    secretValues:
+      username: ""
+      password: ""
+    usernameSecret:
+      secretName: postgres-secrets
+      key: DB_USER
+    passwordSecret:
+      secretName: postgres-secrets
+      key: DB_PASSWORD
+  persistence:
+    size: 40Gi
+    storageClassName: ""
+  resources:
+    requests:
+      cpu: 250m
+      memory: 512Mi

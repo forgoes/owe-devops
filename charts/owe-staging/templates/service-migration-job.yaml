@@ -1,0 +1,66 @@
+{{- if .Values.service.migration.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "owe-staging.serviceName" . }}-migration
+  namespace: {{ .Values.namespace }}
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+spec:
+  backoffLimit: 6
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: migration
+          image: "{{ .Values.service.image.repository }}:{{ .Values.service.image.tag }}"
+          imagePullPolicy: {{ .Values.service.image.pullPolicy }}
+          command:
+            - /bin/sh
+            - -c
+            - |
+              python - <<'PY'
+              import os
+              import time
+
+              import psycopg2
+
+              params = {
+                  "host": os.environ["DB_HOST"],
+                  "port": os.environ["DB_PORT"],
+                  "dbname": os.environ["DB_NAME"],
+                  "user": os.environ["DB_USER"],
+                  "password": os.environ["DB_PASSWORD"],
+              }
+
+              deadline = time.time() + 300
+              while True:
+                  try:
+                      conn = psycopg2.connect(**params)
+                      conn.autocommit = True
+                      with conn.cursor() as cur:
+                          cur.execute("CREATE EXTENSION IF NOT EXISTS vector")
+                      conn.close()
+                      break
+                  except psycopg2.OperationalError:
+                      if time.time() >= deadline:
+                          raise
+                      time.sleep(5)
+              PY
+              alembic upgrade head
+          envFrom:
+            - configMapRef:
+                name: {{ include "owe-staging.serviceName" . }}
+          env:
+{{- range $key, $value := .Values.service.secretEnv }}
+            - name: {{ $key }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $value.secretName }}
+                  key: {{ $value.key }}
+{{- if hasKey $value "optional" }}
+                  optional: {{ $value.optional }}
+{{- end }}
+{{- end }}
+{{- end }}

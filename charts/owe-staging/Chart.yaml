@@ -1,0 +1,7 @@
+apiVersion: v2
+name: owe-staging
+description: Staging deployment for the OWE UI and service
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+

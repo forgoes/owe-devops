@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "postgres.fullname" . }}-init
+  namespace: {{ .Values.namespace }}
+data:
+  01-enable-vector.sql: |
+    CREATE EXTENSION IF NOT EXISTS vector;

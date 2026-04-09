@@ -1,0 +1,21 @@
+{{- if .Values.service.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "owe-staging.serviceName" . }}
+  namespace: {{ .Values.namespace }}
+spec:
+  ingressClassName: {{ .Values.service.ingress.className }}
+  rules:
+    - host: {{ .Values.service.ingress.host }}
+      http:
+        paths:
+          - path: {{ .Values.service.ingress.path }}
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "owe-staging.serviceName" . }}
+                port:
+                  number: {{ .Values.service.service.port }}
+{{- end }}
+
