@@ -27,6 +27,17 @@ spec:
           envFrom:
             - configMapRef:
                 name: {{ include "owe.uiName" . }}
+          env:
+{{- range $key, $value := .Values.ui.secretEnv }}
+            - name: {{ $key }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $value.secretName }}
+                  key: {{ $value.key }}
+{{- if hasKey $value "optional" }}
+                  optional: {{ $value.optional }}
+{{- end }}
+{{- end }}
           readinessProbe:
             httpGet:
               path: /

@@ -25,7 +25,32 @@ ui:
   service:
     port: 3000
   env:
-    NEXT_PUBLIC_API_BASE_URL: https://owe.hongkang.name
+    INTERNAL_API_BASE_URL: http://owe-owe-service.owe.svc.cluster.local:8000
+  secretEnv:
+    AUTH0_DOMAIN:
+      secretName: owe-ui-secrets
+      key: AUTH0_DOMAIN
+      optional: true
+    AUTH0_CLIENT_ID:
+      secretName: owe-ui-secrets
+      key: AUTH0_CLIENT_ID
+      optional: true
+    AUTH0_AUDIENCE:
+      secretName: owe-ui-secrets
+      key: AUTH0_AUDIENCE
+      optional: true
+    APP_BASE_URL:
+      secretName: owe-ui-secrets
+      key: APP_BASE_URL
+      optional: true
+    AUTH0_CLIENT_SECRET:
+      secretName: owe-ui-secrets
+      key: AUTH0_CLIENT_SECRET
+      optional: true
+    AUTH0_SECRET:
+      secretName: owe-ui-secrets
+      key: AUTH0_SECRET
+      optional: true
   route:
     enabled: true
     host: owe.hongkang.name
@@ -56,6 +81,14 @@ service:
     LANGSMITH_PROJECT: owe-service
     LANGSMITH_ENDPOINT: https://api.smith.langchain.com
   secretEnv:
+    AUTH0_DOMAIN:
+      secretName: owe-service-secrets
+      key: AUTH0_DOMAIN
+      optional: true
+    AUTH0_API_AUDIENCE:
+      secretName: owe-service-secrets
+      key: AUTH0_API_AUDIENCE
+      optional: true
     OPENAI_API_KEY:
       secretName: owe-service-secrets
       key: OPENAI_API_KEY

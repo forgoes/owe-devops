@@ -26,7 +26,18 @@ Create a Kubernetes secret named `owe-service-secrets` in the `owe` namespace wi
 - `OPENAI_API_KEY`
 - `DB_USER`
 - `DB_PASSWORD`
+- optional `AUTH0_DOMAIN`
+- optional `AUTH0_API_AUDIENCE`
 - optional `LANGSMITH_API_KEY`
+
+Create a Kubernetes secret named `owe-ui-secrets` in the `owe` namespace with:
+
+- `AUTH0_DOMAIN`
+- `AUTH0_CLIENT_ID`
+- `AUTH0_AUDIENCE`
+- `APP_BASE_URL`
+- `AUTH0_CLIENT_SECRET`
+- `AUTH0_SECRET`
 
 Create a Kubernetes secret named `postgres-secrets` in the `postgres` namespace with:
 
@@ -52,6 +63,16 @@ Edit the copied files with real values, then apply them:
 ```bash
 kubectl apply -f /Users/jayden/workspace/github/owe/owe-devops/secrets/postgres-secrets.yaml
 kubectl apply -f /Users/jayden/workspace/github/owe/owe-devops/secrets/owe-service-secrets.yaml
+```
+
+If Auth0 is enabled, also create the UI secret:
+
+```bash
+kubectl create secret generic owe-ui-secrets \
+  -n owe \
+  --from-literal=AUTH0_CLIENT_SECRET='<auth0-client-secret>' \
+  --from-literal=AUTH0_SECRET='<auth0-session-secret>' \
+  --dry-run=client -o yaml | kubectl apply -f -
 ```
 
 Or keep PostgreSQL credentials in a local Helm values file that is not committed:
@@ -137,3 +158,5 @@ kubectl get svc -n envoy-gateway-system
 
 - The values file currently uses placeholder hostnames and GHCR repositories and should be customized for your environment.
 - This repo assumes a single staging environment for now.
+- Auth0 can be enabled without committing values into Git by populating `owe-ui-secrets` and `owe-service-secrets` with the Auth0 keys listed above.
+- When Auth0 is enabled, `APP_BASE_URL` in `owe-ui-secrets` must match the public UI origin exactly, and Auth0 application callback/logout URLs must include that same origin.
