@@ -61,7 +61,7 @@ service:
   replicaCount: 3
   image:
     repository: ghcr.io/forgoes/owe-service
-    tag: v0.0.1.dev8
+    tag: v0.0.3
     pullPolicy: IfNotPresent
   migration:
     enabled: true
