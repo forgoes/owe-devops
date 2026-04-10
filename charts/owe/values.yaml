@@ -30,27 +30,21 @@ ui:
     AUTH0_DOMAIN:
       secretName: owe-ui-secrets
       key: AUTH0_DOMAIN
-      optional: true
     AUTH0_CLIENT_ID:
       secretName: owe-ui-secrets
       key: AUTH0_CLIENT_ID
-      optional: true
     AUTH0_AUDIENCE:
       secretName: owe-ui-secrets
       key: AUTH0_AUDIENCE
-      optional: true
     APP_BASE_URL:
       secretName: owe-ui-secrets
       key: APP_BASE_URL
-      optional: true
     AUTH0_CLIENT_SECRET:
       secretName: owe-ui-secrets
       key: AUTH0_CLIENT_SECRET
-      optional: true
     AUTH0_SECRET:
       secretName: owe-ui-secrets
       key: AUTH0_SECRET
-      optional: true
   route:
     enabled: true
     host: owe.hongkang.name
@@ -84,11 +78,9 @@ service:
     AUTH0_DOMAIN:
       secretName: owe-service-secrets
       key: AUTH0_DOMAIN
-      optional: true
     AUTH0_API_AUDIENCE:
       secretName: owe-service-secrets
       key: AUTH0_API_AUDIENCE
-      optional: true
     OPENAI_API_KEY:
       secretName: owe-service-secrets
       key: OPENAI_API_KEY
